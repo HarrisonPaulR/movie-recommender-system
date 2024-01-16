@@ -4,9 +4,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 # contains movie info
-movies = pd.read_csv(r"data\tmdb_5000_movies.csv", encoding='latin1')
+movies = pd.read_csv(r"https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_movies.csv", encoding='latin1')
 # contains cast and crew info
-credit = pd.read_csv(r"data\tmdb_5000_credits.csv", encoding='latin1')
+credit = pd.read_csv(r"https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_credits.csv", encoding='latin1')
 
 # merging movies and credits
 movies = movies.merge(credit, on='title')
