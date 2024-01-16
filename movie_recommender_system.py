@@ -4,9 +4,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 # contains movie info
-movies = pd.read_csv(r"https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_movies.csv", encoding='latin1')
+movies_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_movies.csv"
+movies = pd.read_csv(movies_path)
 # contains cast and crew info
-credit = pd.read_csv(r"https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_credits.csv", encoding='latin1')
+credits_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_credits.csv"
+credit = pd.read_csv(credits_path)
 
 # merging movies and credits
 movies = movies.merge(credit, on='title')
@@ -105,9 +107,9 @@ def stemming(text):
 
 similarity = cosine_similarity(vector)
 
-sorted(list(enumerate(similarity[0])),reverse=True,key=lambda x:x[1])[1:6]
+sorted(list(enumerate(similarity[0])), reverse=True, key=lambda x: x[1])[1:6]
 
-# 5.write fn to calculate movie index,distnace and get list of movies(top 5) with high similiarity
+# 5.write fn to calculate movie index,distance and get list of movies(top 5) with high similiarity
 def recommend(movie):
     movie_index = new_movies[new_movies['title'] == movie].index[0]
     distance = sorted(list(enumerate(similarity[movie_index])),reverse=True,key=lambda x:x[1])
