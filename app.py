@@ -8,7 +8,7 @@ from movie_recommender_system import similarity
 
 movies_list = movies
 # movies_list = movies_list['title'].values
-# movies_list = pd.DataFrame(movies_list)
+movies_list = pd.DataFrame(movies_list)
 
 
 def fetch_poster(movie_id):
