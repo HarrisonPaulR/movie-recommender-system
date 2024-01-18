@@ -4,15 +4,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk import PorterStemmer
 from sklearn.metrics.pairwise import cosine_similarity
 # contains movie info
-movies_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_movies.csv"
-movies = pd.read_csv(movies_path)
+movies_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_movies.csv?raw=true"
+movies = pd.read_csv(movies_path,encoding='latin1')
 # contains cast and crew info
-credits_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_credits.csv"
-credit = pd.read_csv(credits_path)
-
+credits_path = "https://github.com/Harrisonpaul69/movie-recommender-system/blob/8fbf6aab5a1e4cb3b24d75c61dd37136887be2a0/data/tmdb_5000_credits.csv?raw=true"
+credit = pd.read_csv(credits_path,encoding='latin1')
 # merging movies and credits
 movies = movies.merge(credit, on='title')
-# movies.info()
+movies.info()
 
 movies = movies[['title', 'genres', 'id', 'keywords', 'overview', 'cast', 'crew']]
 movies.isnull().sum()
@@ -21,17 +20,14 @@ movies.isnull().sum()
 # dropping those rows which has null values
 movies.dropna(inplace=True)
 
-
 def derive(a):
     L = []
     for i in ast.literal_eval(a):
         L.append(i['name'])
     return L
 
-
 movies['genres'] = movies['genres'].apply(derive)
 movies['keywords'] = movies['keywords'].apply(derive)
-
 
 # To get top 3 cast of the movie
 def derive3(a):
@@ -47,7 +43,6 @@ def derive3(a):
 
 
 movies['cast'] = movies['cast'].apply(derive3)
-
 
 # To get the director name alone from cast json format
 def deriveDirector(a):
@@ -75,28 +70,22 @@ new_movies['tags'] = new_movies['tags'].apply(lambda x: [i.replace(" ", "") for 
 
 pd.set_option('max_colwidth', None)
 
-# Convertng tags --> list to string
+# Converting tags --> list to string
 new_movies['tags'] = new_movies['tags'].apply(lambda x:" ".join(x))
 
 new_movies['tags'] = new_movies['tags'].str.lower()
-# ====Preprocessing ends --Convertng the strng to lowercase
-
-# print(new_movies.head(4))
+# ====Preprocessing ends --Converting string to lowercase
 
 # Vectorization starts----
 # 1.Create a vector and its count using countvectorizer and remove stop words from sklearn
-
 cv = CountVectorizer(max_features=5000,stop_words='english')
-
 vector = cv.fit_transform(new_movies['tags']).toarray()
 
 # 2.analyse the feature name of the vectors
 cv.get_feature_names_out()
 
 # 3.remove the repeated words using stem fn from ntlk
-
 ps = PorterStemmer()
-
 def stemming(text):
     L =[]
     for i in text:
@@ -104,10 +93,7 @@ def stemming(text):
     return " ".join(L)
 
 # 4.find the cosine similarity
-
 similarity = cosine_similarity(vector)
-
-sorted(list(enumerate(similarity[0])), reverse=True, key=lambda x: x[1])[1:6]
 
 # 5.write fn to calculate movie index,distance and get list of movies(top 5) with high similiarity
 def recommend(movie):
@@ -116,4 +102,3 @@ def recommend(movie):
     for i in distance[1:6]:
         print(new_movies.iloc[i[0]].title)
 
-# recommend("Batman")

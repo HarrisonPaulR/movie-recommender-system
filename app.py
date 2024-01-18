@@ -1,11 +1,14 @@
 import streamlit as st
 import pandas as pd
 import requests
-from movie_recommender_system import movies,similarity
+# import movie_recommender_system
+from movie_recommender_system import movies
+from movie_recommender_system import similarity
+
 
 movies_list = movies
 # movies_list = movies_list['title'].values
-movies_list = pd.DataFrame(movies_list)
+# movies_list = pd.DataFrame(movies_list)
 
 
 def fetch_poster(movie_id):
@@ -29,7 +32,6 @@ def recommend(movie):
 
 
 st.title("Movie Recommender")
-
 selected_movie = st.selectbox(
     'Enter the name of movie',
     movies_list['title'].values)
