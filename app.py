@@ -1,4 +1,4 @@
-import pickle
+import compress_pickle as pickle
 import streamlit as st
 import requests
 import base64
@@ -48,8 +48,8 @@ def recommend(movie):
 
 
 st.header('Movie Recommender System')
-movies = pickle.load(open('assets/processed_data/movies.pkl', 'rb'))
-similarity = pickle.load(open('assets/model/similarity.pkl', 'rb'))
+movies = pickle.load(open('assets/pickles/movies', 'rb'),compression='lzma')
+similarity = pickle.load(open('assets/pickles/similarity', 'rb'),compression='lzma')
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
