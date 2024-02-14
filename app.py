@@ -1,7 +1,8 @@
-import compress_pickle as pickle
+import _pickle as pickle
 import streamlit as st
 import requests
 import base64
+import lzma
 
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
@@ -46,10 +47,22 @@ def recommend(movie):
     return recommended_movie_names,recommended_movie_posters
 
 
-
 st.header('Movie Recommender System')
-movies = pickle.load(open('assets/pickles/movies', 'rb'),compression='lzma')
-similarity = pickle.load(open('assets/pickles/similarity', 'rb'),compression='lzma')
+url1 = 'https://raw.githubusercontent.com/HarrisonPaulR/movie-recommender-system/blob/398310beb93ca737300d087d67f1cc3cc9b025c7/assets/pickles/movies.lzma'
+url2 = 'https://raw.githubusercontent.com/HarrisonPaulR/movie-recommender-system/blob/70da3844214c4a71d881e72bca6fe8752cecf7b2/assets/pickles/similarity.lzma'
+# movie_response = requests.get(url1).content
+# similarity_response = requests.get(url2).content
+# movies = pickle.load(movie_response,'lzma')
+# similarity = pickle.load(similarity_response,'lzma')
+
+movie_response = requests.get(url1)
+similarity_response = requests.get(url2)
+
+with lzma.open('assets/pickles/movies.lzma', 'rb') as f:
+    movies = pickle.load(f)
+
+with lzma.open('assets/pickles/similarity.lzma','rb') as f:
+    similarity = pickle.load(f)
 
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
